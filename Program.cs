@@ -23,9 +23,33 @@ while (programma)
 
     switch (clientOrEmployeeMenu)
     {
+        //CUSTOMER SUB MENU
         case 1:
             Console.WriteLine("Benvenuto nel nostro store");
+            bool customerMenu = true;
+            while (customerMenu)
+            {
+                Console.WriteLine("1 - Acquista un ordine");
+                Console.WriteLine("9 - Esci");
+
+                int customerMenuAnswer = Convert.ToInt32(Console.ReadLine());
+                switch (customerMenuAnswer)
+                {
+                    case 1:
+                        BuyOrder();
+                        //Console.WriteLine("Ecco tutti i nostri prodotti disponibili nello store");
+                        //PrintAllOrder();
+                        break;
+                    case 9:
+                        customerMenu = false;
+                        break;
+                    default:
+                        Console.WriteLine("Digitare un'operazione valida!");
+                        break;
+                }
+            }
             break;
+            //EMPLOYEE SUB MENU
         case 2:
             bool employeeMenu = true;
             while (employeeMenu)
@@ -144,7 +168,7 @@ void AddNewOrder()
 
     for(int i = 0; i < numberOfProducts; i++)
     {
-        Console.Write("Digitare ID prodotto: ");
+        Console.Write($"Digitare ID {i+0}° prodotto: ");
         int productIdToSearch = Convert.ToInt32(Console.ReadLine());
 
         Product productToInsert = db.Products.Where(product => product.Id == productIdToSearch).First();
@@ -159,4 +183,41 @@ void AddNewOrder()
     db.Orders.Add(newOrder);
     db.SaveChanges();
     Console.WriteLine("Ordine aggiunto!");
+}
+void PrintAllOrder()
+{
+    List<Order> totalOrders = db.Orders.Where(order => order.Status == true).ToList();
+
+    foreach (Order order in totalOrders)
+    {
+        Console.WriteLine();
+        Console.WriteLine(order.ToString());
+        foreach(Product product in order.Products)
+        {
+            try
+            {
+                Console.WriteLine(product.ToString());
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+        Console.WriteLine();
+    }
+}
+void BuyOrder()
+{
+    Console.Write("Digita l'ID del bundle che vuoi acquistare: ");
+    int bundleId = Convert.ToInt32(Console.ReadLine());
+    Console.Write("Digita la tua mail: ");
+    string customerMail = Console.ReadLine();
+
+    Customer customerToSearch = db.Customers.Where(customerToSearch => customerToSearch.Email == customerMail).FirstOrDefault();
+
+    Order orderToBuy = db.Orders.First(order => order.Id == bundleId);
+    orderToBuy.CustomerId = customerToSearch.Id;
+    db.SaveChanges();
+    Console.WriteLine("Bundle acquistato!");
+    Console.WriteLine();
 }

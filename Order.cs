@@ -1,4 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using System.Diagnostics;
+
 public class Order
 {
     public int Id { get; set; }
@@ -14,4 +16,9 @@ public class Order
 
     public List<Payment> Payments { get; set; }
     public List<Product> Products { get; set; }
+
+    public override string ToString()
+    {
+        return "ID: " + Id + " - " + Date + " - " + "Disponibile: " + Status + " - " + + Amount + " euro";
+    }
 }
