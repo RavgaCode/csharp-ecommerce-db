@@ -6,7 +6,7 @@ public class Order
     public double Amount { get; set; }
     public bool Status { get; set; }
 
-    public int CustomerId { get; set; }
+    public int? CustomerId { get; set; }
     public Customer Customer { get; set; }
 
     public int EmployeeId { get; set; }
